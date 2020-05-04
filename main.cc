@@ -29,18 +29,16 @@ int vs_player_or_computer()
     cout <<"3.Exit"<<endl;
     cout <<"Choice:";
 
-    while(choice < 1 || choice > 3)
+    cin >> choice;
+    while(cin.fail())
     {
+        cout << "Error. Please enter a number!" << endl;
+        cin.clear();
+        cin.ignore(256,'\n');
         cin >> choice;
-
-        if (choice < 1 || choice > 3)
-        {
-            cout << "Invalid choice. Try again!" << endl;
-            cout <<"Choice:";
-        }
     }
+
     cin.ignore();
-    // cin.get();
     return choice;
 
 }
@@ -50,7 +48,19 @@ void getGameData()
     int mode = 0;
     cout << "Welcome to Tic Tac Toe" << endl;
 
-    mode = vs_player_or_computer();
+    while(1)
+    {
+        mode = vs_player_or_computer();
+
+        if (mode < 1 || mode > 3)
+        {
+            cout << "Invalid inpute. Please choose 1, 2 or 3\n" << endl;
+        }
+        else
+        {
+            break;
+        }
+    }
 
     if (mode == 1)
     {
@@ -66,6 +76,12 @@ void getGameData()
         getPlayerData(gameData.player_two_name, gameData.player_two_tag);
 
     }
+    else
+    {
+        cout << "Bye!" << endl;
+        exit(1);
+    }
+    
 }
 
 void getPlayerData(string& playerName, char& player_tag)
@@ -74,9 +90,21 @@ void getPlayerData(string& playerName, char& player_tag)
     cin >> playerName;
     cin.ignore();
 
-    cout << "Enter Player Game Tag: ";
-    cin >> player_tag;
-    cin.ignore();
+    while (1)
+    {
+        cout << "Enter Player Game Tag: ";
+        cin >> player_tag;
+        cin.ignore();
+
+        if(isdigit(player_tag))
+        {
+            cout << "Invalid player tag. Please enter a tag that is not a number!" << endl;
+        }
+        else
+        {
+            break;
+        }   
+    }
 }
 
 char playAgain()
@@ -100,11 +128,8 @@ char playAgain()
         }
     }
     cin.ignore();
-    // cin.get();
     return choice;
 }
-
-
 
 int main()
 {
@@ -128,6 +153,15 @@ int main()
         if(playAgainChoice == 'N' || playAgainChoice == 'n')
         {
             break;
+        }
+        else if (playAgainChoice == 'Y' || playAgainChoice == 'y')
+        {
+            cout << "New game in session" << endl;
+        }
+        else
+        {
+            cout << "Invalid choice: Please choose between Y or N" << endl;
+            playAgainChoice = playAgain();
         }
     }
 
