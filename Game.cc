@@ -40,6 +40,13 @@ Game::~Game()
 {
     delete player_one;
     delete player_two;
+    delete winner;
+}
+
+string Game::getPlayerNameById(int playerId)
+{
+    string name = (player_one->getPlayerId() == playerId) ? player_one->getPlayerName() : player_two->getPlayerName();
+    return name;
 }
 
 void Game::drawBoard()
@@ -111,7 +118,7 @@ int Game::checkWin()
 
 void Game::startGame()
 {
-    int player  = player_one->getPlayerId(), i , choice;
+    int curr_player_id  = player_one->getPlayerId(), i , choice;
 
     char mark;
     bool invalidMove = false;
@@ -122,25 +129,23 @@ void Game::startGame()
 
         if (!invalidMove)
         {
-            if(player == 1)
+            if(curr_player_id == 1)
             {
-                player = 2;
+                curr_player_id = 2;
             }
             else
             {
-                player = 1;
+                curr_player_id = 1;
             }
         }
         else
         {
             invalidMove = false;
         }
-        //player = (player%2) ? player_one->getPlayerId() : player_two->getPlayerId();
 
-        mark = (player == 1) ? player_one->getPlayerTag() : player_two->getPlayerTag();
-
-        cout << "Next Player id: " << player << " with tag: " << mark << endl;
-        cout << endl;
+        mark = (curr_player_id == player_one->getPlayerId()) ? player_one->getPlayerTag() : player_two->getPlayerTag();
+        
+        cout << "It's " << getPlayerNameById(curr_player_id) << "'s turn (Player ID: " << curr_player_id << ", Tag: " << mark << ")." << endl;
 
         cin >> choice;
 
@@ -184,30 +189,28 @@ void Game::startGame()
         {
             cout<<"Invalid move. Try again!: ";
             invalidMove = true;
-            //player--;
             cin.ignore();
-            //cin.get();
         }
 
         i = checkWin();
 
-        //player++;
     }while(i == -1);
 
     drawBoard();
 
     if(i==1)
     {
-        string winner = (player == 1) ? player_one->getPlayerName() : player_two->getPlayerName();
-        cout<<"==>\a"<< winner << "(Player: "<< player << ")" <<" wins "<<endl;
+        winner = (curr_player_id == player_one->getPlayerId()) ? player_one : player_two;
+        string winner_name = winner->getPlayerName();
+        cout<<"==>\a "<< winner_name << " ( Player: "<< curr_player_id << ", Tag: "<< mark << ")" <<" wins "<<endl;
     }
     else
     {
-        cout<<"==>\aGame draw";
+        cout<<"==>\aGame draw" << endl;;
     }
 
     cin.ignore();
-    //cin.get();
+    
 }
 
 ostream& operator<<(ostream &out, const Game &game)
