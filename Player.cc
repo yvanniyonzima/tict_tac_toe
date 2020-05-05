@@ -14,8 +14,7 @@ Player::Player(string player_name, char player_tag, int player_id)
 
 Player::~Player()
 {
-    // delete m_player_tag;
-}
 
+}
     
 } // tictactoe
